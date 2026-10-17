@@ -2,6 +2,14 @@
 
 A prompt-only adaptation of the tournament workflow in [Arena Skill](https://github.com/Jakeschincariol/arena-skill), intended for use in an ordinary ChatGPT Free conversation.
 
+## Stage 1 entry point
+
+- **[Stage 1 overview and completion criteria](STAGE_1.md)** — what this stage does, what it does not do, and how to validate it.
+- **[Stage 1 quick-start handoff](STAGE_1_STARTER.md)** — the short launch instructions and expected final report.
+- [Full reusable tournament prompt](CHATGPT_ARENA_PROMPT.md) — paste this as the first message in a fresh ChatGPT conversation.
+
+Stage 1 is a no-paid-API protocol for competing candidate approaches. It is **not** a real 100-sub-agent runtime; automated independent workers are a separate later stage.
+
 ## What it does
 
 Give the same task to several deliberately different problem-solving approaches. Challenge the drafts with concrete counterexamples, require each draft to answer the criticism, then compare the revised finalists using a written scoring rubric.
