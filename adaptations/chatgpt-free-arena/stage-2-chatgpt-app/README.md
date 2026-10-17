@@ -9,12 +9,18 @@ Use this mode inside the regular ChatGPT app, without a paid API key, Ollama, or
 3. Send your authorized scope using this command:
 
 ~~~text
-ARENA SECURITY 100: [repository/project, branch or test environment, authorized scope, goals, constraints]
+ARENA SECURITY 100: https://github.com/YOUR-ACCOUNT/YOUR-APP-REPO
 ~~~
+
+Add one sentence after it: `I own this project or have permission to test it. Secure all relevant assets. Use source review first, local/staging tests only, fix on a separate branch, add regression tests, and never merge or deploy.`
 
 If the exact repository/project or authorization scope is not clear, the prompt should ask you one direct question and wait before testing.
 
 Then send NEXT WORKER between runs. Each assistant response handles exactly one worker, from 001 through 100. Worker 002 and later must first retest previous fixes before examining their assigned security lens. Checkpoints are required every five completed workers and after major fix/retest cycles.
+
+## Security knowledge used during development
+
+Each worker must consult the reusable [Security by Design Playbook](https://github.com/hkadam888555888/ai-conversation-hub/blob/feat/security-by-design-knowledge/tests/security/SECURITY_BY_DESIGN_PLAYBOOK.md) when the connected GitHub access allows it. It covers credentials/signing keys, account access, private data, common app attack surfaces, Android, web/backend, AI/ML integrations, build pipelines and release protection. If the private Hub is inaccessible, the worker records that blocker and still uses the built-in threat register. Every code change needs a relevant regression test and later-worker bypass retest; the playbook is guidance, not proof the app is secure.
 
 ## What each worker does
 
