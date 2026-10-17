@@ -37,6 +37,12 @@ Each actionable root cause gets a stable SEC-001, SEC-002, ... ID and a detailed
 
 The recommended red label is security:red with color #B60205. This prompt cannot create labels through a connector that exposes only issue operations. In that case, it must tell the owner the label is missing and never pretend the visual red marker exists.
 
+## Required AI Conversation Hub checklist sync
+
+After a vulnerability is confirmed through a safe reproduction within the authorized scope, add it immediately to the private AI Conversation Hub's [Security Release Checklist](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/SECURITY_RELEASE_CHECKLIST.md) using the same SEC finding ID. Include the project and tested revision, evidence/issue link, severity and confidence, product-side regression test path/command, fix reference and later-worker retest status. This must happen before that worker is marked complete. When access permits, add the regression test to the actual product repository's test suite; the hub checklist is an index, not a substitute for executable tests.
+
+Before any production-ready recommendation, use the Hub's [Production-Readiness Grade](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/PRODUCTION_READINESS_GRADE.md). Open confirmed Critical/High findings, failed or untested required regression checks, missing candidate evidence, or absent owner approval block a READY recommendation regardless of score. Claim a record was saved only after a successful GitHub write and read-back.
+
 ## What "100 workers" means here
 
 It means 100 sequential, role-conditioned worker runs—one per ChatGPT assistant response. They are not 100 different trained models, and all share the conversation history. This prompt cannot bypass ChatGPT usage/context limits. Save portable checkpoints, because the 100 audits and their retests may be too long for one uninterrupted session.
