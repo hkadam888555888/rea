@@ -15,12 +15,14 @@ A staged no-paid-API adaptation inspired by the public [Arena Skill](https://git
 Paste [the 100-run security prompt](stage-2-chatgpt-app/CHATGPT_100_WORKER_PROMPT.md) into a fresh ChatGPT conversation, then send:
 
 ~~~text
-ARENA SECURITY 100: [authorized repository/project, branch or test environment, scope, goals, constraints]
+ARENA SECURITY 100: https://github.com/YOUR-ACCOUNT/YOUR-APP-REPO
 ~~~
 
 It runs one worker per response. Every subsequent worker receives the current ledger and handoff, retests previous fixes, explores the next security lens, deduplicates findings, and fixes confirmed vulnerabilities when repository write access is real. Findings can be logged to GitHub issues and marked with a red security label if the repository has that label and the connected integration can apply it. If GitHub access or label creation is missing, the assistant must state the blocker and provide the issue/patch draft instead.
 
 See the [Security Findings Ledger Template](stage-2-chatgpt-app/SECURITY_FINDINGS_LEDGER_TEMPLATE.md) for the central attacker-objective register—the box listing what an attacker might want to obtain, control, alter, execute, or disrupt—and the all-runs findings index.
+
+Before code changes, Stage 2 workers also consult the shared [Security by Design Playbook](https://github.com/hkadam888555888/ai-conversation-hub/blob/feat/security-by-design-knowledge/tests/security/SECURITY_BY_DESIGN_PLAYBOOK.md) when the connected GitHub access permits. It gives reusable defensive checks for secrets, identity, user data, app boundaries, mobile/web, AI tools and release pipelines. If the private Hub cannot be accessed, use the built-in threat register and report the access blocker—never claim the playbook was read.
 
 ## Important limits
 
