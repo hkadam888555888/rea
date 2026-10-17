@@ -34,6 +34,8 @@ The local engine is a separate program using a local Ollama model; it does not a
 2. Paste the full [CHATGPT_ARENA_PROMPT.md](CHATGPT_ARENA_PROMPT.md).
 3. Send ARENA QUICK: [your task] for four candidate perspectives, or ARENA: [your task] for eight.
 
+For every confirmed, successfully reproduced vulnerability in security mode, update the private AI Conversation Hub's [security regression checklist](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/SECURITY_RELEASE_CHECKLIST.md) before that worker is complete. Link the finding/issue, tested revision, evidence, product-side regression-test path, fix, and later-worker retest. Before any shipping recommendation, apply the Hub's [production-readiness grade](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/PRODUCTION_READINESS_GRADE.md); hard security gates override numeric scores.
+
 ## Evidence and safeguards
 
 Findings must include evidence, confidence, realistic impact, preconditions, safe reproduction, and remediation guidance. A patch is not verified until a later worker retests it. A high severity issue must not be represented as confirmed without evidence, and a winner or completed checklist is not proof that a system is secure.
