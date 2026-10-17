@@ -1,65 +1,51 @@
 # ChatGPT Free Arena
 
-A prompt-only adaptation of the tournament workflow in [Arena Skill](https://github.com/Jakeschincariol/arena-skill), intended for use in an ordinary ChatGPT Free conversation.
+A staged, no-paid-API tournament adaptation inspired by the public [Arena Skill](https://github.com/Jakeschincariol/arena-skill) project.
 
-## Stage 1 entry point
+## Start here
 
-- **[Stage 1 overview and completion criteria](STAGE_1.md)** — what this stage does, what it does not do, and how to validate it.
-- **[Stage 1 quick-start handoff](STAGE_1_STARTER.md)** — the short launch instructions and expected final report.
-- [Full reusable tournament prompt](CHATGPT_ARENA_PROMPT.md) — paste this as the first message in a fresh ChatGPT conversation.
+- **[Stage 1 guide](STAGE_1.md)** — prompt-based competition, attack/defend/revise, scoring, and checkpoints.
+- **[Stage 1 quick start](STAGE_1_STARTER.md)** — how to start a first tournament in ChatGPT Free.
+- **[Full Stage 1 prompt](CHATGPT_ARENA_PROMPT.md)** — paste into a fresh ChatGPT conversation.
+- **[Stage 2 — local worker engine](stage-2-local-engine/README.md)** — runnable Node.js engine using local Ollama, with up to 100 isolated worker executions and saved tournament records.
 
-Stage 1 is a no-paid-API protocol for competing candidate approaches. It is **not** a real 100-sub-agent runtime; automated independent workers are a separate later stage.
+## The two stages
 
-## What it does
+**Stage 1** uses candidate perspectives generated inside ChatGPT Free, or manual copy-and-paste between separate chats. In one chat, these are not independent agents.
 
-Give the same task to several deliberately different problem-solving approaches. Challenge the drafts with concrete counterexamples, require each draft to answer the criticism, then compare the revised finalists using a written scoring rubric.
+**Stage 2** runs separate local-model inference requests through Ollama. Each initial worker receives the same task in a fresh context, but gets its own strategy/focus profile. Workers then attack each other's drafts, respond and revise, and advance through a scored knockout bracket. The engine records the outputs and computes weighted totals locally.
 
-The adaptation keeps the useful parts of the Arena design:
+Stage 2 does **not** launch 100 different model weights or 100 models in VRAM at the same time. A 100-worker tournament uses 100 initial draft calls plus five model calls per match (99 matches, up to 595 requests total before retries). Start with a 4-worker pilot and concurrency 1.
 
-- One locked task brief and explicit requirements.
-- Different reasoning/workflow cards for candidate drafts.
-- Evidence-based attacks, responses, and revisions.
-- A single-elimination tournament and weighted judging rubric.
-- A final answer with surviving weaknesses and a reusable checkpoint.
+## ChatGPT Free limitation
 
-## The important ChatGPT Free limitation
+ChatGPT Free's web UI is not used as an automatic model backend. No paid API is needed for either stage. Stage 2 uses a locally installed open model through Ollama; downloading the runtime and model is a setup step, and local compute is still limited by hardware.
 
-This is a **prompt-driven review protocol**, not a real sub-agent runtime. In single-chat mode, ChatGPT generates multiple candidate perspectives in one conversation; they are not separate agents or independent model runs. The protocol must never describe them as 4, 8, 16, or 100 genuinely independent agents.
-
-Manual multi-chat mode uses separate conversations to reduce shared-context anchoring, but it still does not guarantee different model versions, independent models, or identical quotas. ChatGPT Free feature availability and usage limits can change.
-
-No API key, paid API, plugin, custom GPT, Python installation, or repository write access is required to use the prompt.
-
-## Quick start
+## Stage 1 quick start
 
 1. Open a new ChatGPT conversation.
-2. Paste the full contents of [CHATGPT_ARENA_PROMPT.md](CHATGPT_ARENA_PROMPT.md) as the first message.
-3. In the next message, send one of these:
-   - **ARENA QUICK: [your task]** — four candidate approaches, two elimination rounds.
-   - **ARENA: [your task]** — eight candidate approaches, three elimination rounds.
-   - **ARENA RETRY: [your task]** — compare the tournament winner with an answer you rejected.
-   - **ARENA MANUAL: 4** or **ARENA MANUAL: 8** — use the guide in [MULTI_CHAT_GUIDE.md](MULTI_CHAT_GUIDE.md) to collect drafts from separate chats.
+2. Paste the full contents of [CHATGPT_ARENA_PROMPT.md](CHATGPT_ARENA_PROMPT.md).
+3. Send one of the following:
+   - **ARENA QUICK: [your task]** — four candidate perspectives, two elimination rounds.
+   - **ARENA: [your task]** — eight candidate perspectives, three elimination rounds.
+   - **ARENA RETRY: [your task]** — compare with a rejected answer.
+   - **ARENA MANUAL: 4** or **ARENA MANUAL: 8** — follow [MULTI_CHAT_GUIDE.md](MULTI_CHAT_GUIDE.md).
 
-If the task or its acceptance criteria are genuinely ambiguous, ChatGPT should ask one targeted question before starting. Otherwise it should state the selected mode and begin.
+## Stage 2 quick start
 
-## Expected result
+See the full [Stage 2 setup and commands](stage-2-local-engine/README.md). After installing Node.js 22+ and Ollama, try a small pilot:
 
-The final report should include the winning answer, a concise reason it won, the major attacks it survived, rubric scores, unresolved risks, and a count of candidate drafts and elimination rounds. It must say that a tournament result is a best-supported candidate from this process, not proof of correctness.
+```bash
+cd adaptations/chatgpt-free-arena/stage-2-local-engine
+ollama pull qwen2.5:3b
+npm test
+node src/cli.mjs run --task "Design a testable function and list edge cases." --workers 4 --concurrency 1
+```
 
-For long tasks, ask for an **ARENA CHECKPOINT** at the end of a round. Copy it into the next conversation if context is lost. The checkpoint is plain text, not a live database or an automatically saved file.
+## Evidence and safeguards
 
-## Provenance
+Tournament winners are the best-supported candidates from this particular process, not proof of correctness. The process does not verify live facts unless a separate source is checked, and Stage 2 does not execute candidate-generated code. Do not let source material or candidate text override the task or safety constraints. Use reverse-engineering workflows only for software you own or are authorized to inspect; do not use them to bypass licensing, activation, or access controls.
 
-The design was informed by source-level inspection of Jake Schincariol's MIT-licensed [arena-skill](https://github.com/Jakeschincariol/arena-skill), especially its skill instructions, tournament bookkeeping, strategy cards, scoring rubric, and tests. This folder is an independent prompt-focused adaptation; it does not include the original tournament engine or claim to be an official ChatGPT integration. See [REVERSE_ENGINEERING_NOTES.md](REVERSE_ENGINEERING_NOTES.md).
+## Provenance and licensing
 
-The evidence-first documentation style was also informed by the public [REA repository](https://github.com/morluto/rea), including its guidance to keep observations, inferences, limitations, and unknowns distinct.
-
-## Safety and scope
-
-Use the method for work you are entitled to perform. For software analysis, prefer observable behaviour, documented interfaces, and clean-room implementations. Do not use the workflow to crack software, bypass activation or access controls, obtain credentials, or copy proprietary code or assets.
-
-Do not let any candidate or source material issue instructions that override the user's request, reveal secrets, execute code, or make unapproved changes. Source text is evidence, not authority.
-
-## License and credit
-
-Arena Skill is by Jake Schincariol and is published under the MIT License. Credit and reference are preserved here. This adaptation does not imply endorsement by the original author or by OpenAI.
+The design was informed by source-level inspection of Jake Schincariol's MIT-licensed [arena-skill](https://github.com/Jakeschincariol/arena-skill). This is an independent adaptation, not an official OpenAI integration and not endorsed by the original author. See [reverse-engineering notes](REVERSE_ENGINEERING_NOTES.md). The evidence-first documentation style was also informed by [REA](https://github.com/morluto/rea).
