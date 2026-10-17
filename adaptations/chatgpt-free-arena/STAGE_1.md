@@ -27,50 +27,34 @@ Ship the first usable no-paid-API phase of the Arena workflow: a repeatable comp
    - `ARENA MANUAL: 4` or `ARENA MANUAL: 8` — follow [MULTI_CHAT_GUIDE.md](MULTI_CHAT_GUIDE.md) for manual copy-and-paste coordination.
 4. Check the score arithmetic, key evidence, remaining risks, and tests that were not run. Treat the winner as the best-supported candidate, not as guaranteed truth.
 
-## Stage 1 workflow
+## Stage 2 — choose how to run 100 workers
 
-1. **Lock the brief.** Record task, hard constraints, provided facts, acceptance checks, and unknowns. Ask one targeted question only if a missing detail would materially change the outcome.
-2. **Draft candidates.** Give each candidate the exact same brief and one distinct card from [STRATEGY_CARDS.md](STRATEGY_CARDS.md). Do not let candidates see one another's initial drafts.
-3. **Attack each pairing.** Require specific claims or choices to be challenged, with severity and a counterexample, source, logical reason, or test where possible.
-4. **Defend and revise.** Every attack must be conceded, partly conceded, or rebutted. Accepted criticism must produce a revised answer; the revision must be checked for regressions.
-5. **Judge.** Apply the weights in [RUBRIC.md](RUBRIC.md). A verified fatal flaw cannot lose to a non-fatal candidate solely because of a higher numeric score.
-6. **Advance and record.** Keep the winner, raw scores, decisive issue, and remaining uncertainty. Do not invent missing results.
-7. **Report.** Return the winning deliverable, decisive attacks survived, scores, limits, and a checkpoint when continuation may be needed.
+### Option A: Stay inside the ChatGPT app
 
-## Stage 2 — actual local worker executions
+Use **[Stage 2 ChatGPT App Mode](stage-2-chatgpt-app/README.md)** if you want to use the ChatGPT app and no local model/API. Paste [the 100-worker prompt](stage-2-chatgpt-app/CHATGPT_100_WORKER_PROMPT.md) into a new conversation, send `ARENA CHATGPT 100: [task]`, then send `NEXT WORKER` for every subsequent worker until ID 100 is complete.
 
-For separately executed worker jobs with per-worker files, automatic attack/revision calls, bracket advancement, persistent progress, and a CLI, use the [Stage 2 local worker engine](stage-2-local-engine/README.md).
+This is one worker draft per ChatGPT response. It uses the model ChatGPT serves to that conversation; it does not create 100 different model weights, and previous conversation history remains visible. The prompt cannot override product usage or context limits. The bracket then requires 99 matches, one per `NEXT MATCH` request, with checkpoints after each round.
 
-Stage 2 uses Node.js 22+ and a locally running Ollama model; it does not turn ChatGPT Free's web interface into an API. It can execute up to 100 initial worker runs with 100 distinct combinations of approach and focus. Workers share the same local model by default but receive isolated prompts. A 100-worker run can create hundreds of model requests, so begin with four workers and concurrency one. See [Architecture](stage-2-local-engine/docs/ARCHITECTURE.md) for the actual execution boundaries and limitations.
+### Option B: Run a local model programmatically
 
-## How Stage 1 differs from the 100-worker target
+Use the [Stage 2 local worker engine](stage-2-local-engine/README.md) for automatic scheduling, isolated model requests through Ollama, output files, and resuming interrupted runs. This engine is not a controller for the ChatGPT app.
 
-| Capability | Stage 1 | Stage 2 |
-|---|---|---|
-| Four or eight candidate drafts | Prompt protocol | Supported as local jobs |
-| Up to 100 initial worker executions | Not provided | Supported through Ollama |
-| Independent initial prompt/context per worker | Manual chat separation only | Yes, separate inference requests |
-| Different trained model weights per worker | Not guaranteed | Not provided by default |
-| Attack, defense, and revision rounds | Prompt protocol | Automated local inference workflow |
-| Automatic collection and persistent logs | Not provided | Saved to local run directory |
-| Code execution or web search | Not provided | Not provided |
-| Paid API key required | No | No |
+## How the workflow compares
 
-Stage 1 validates the tournament procedure; Stage 2 automates the repeatable worker and match workflow locally. Neither makes the winner objectively correct.
+| Capability | Stage 1 | ChatGPT App Mode | Local Engine Mode |
+|---|---|---|---|
+| Candidate drafts | 4 or 8 prompt perspectives | 100 sequential responses | Up to 100 isolated local requests |
+| Different trained model weights | Not guaranteed | No | No, same local model by default |
+| Worker initial prompts/context boundaries | One shared conversation or manual separate chats | Same ChatGPT conversation history | Separate request contexts |
+| Attacks, revisions and judging | Prompt protocol | One matchup per ChatGPT response | Automated local model calls |
+| Automatic local persistence | No | No; user keeps checkpoints | Yes |
+| Paid API key required | No | No | No |
 
 ## Completion criteria
 
-Stage 1 is ready for a small pilot when a user can run a writing task and a logic/code task and the protocol:
+A tournament result must preserve actual candidate and match counts, specific attack/revision records, correct score arithmetic, unverified risks, and tests that were not run. Missing workers or match results must remain missing; never claim that an unfinished run is complete. A winner is a best-supported result from the selected protocol, not proof of correctness.
 
-- uses the same task brief for every candidate;
-- preserves actual candidate count and match records;
-- gives specific attack/defense/revision records;
-- computes rubric totals correctly;
-- does not claim that code was executed unless a tool actually ran it;
-- retains uncertainty and identifies unchecked tests;
-- can resume from a checkpoint without fabricating missing history.
-
-Use [VALIDATION_CHECKLIST.md](VALIDATION_CHECKLIST.md) to record manual checks. Those checks remain unverified until someone actually performs them.
+Use [VALIDATION_CHECKLIST.md](VALIDATION_CHECKLIST.md) for manual checks. Those checks remain unverified until someone actually performs them.
 
 ## Guardrails
 
