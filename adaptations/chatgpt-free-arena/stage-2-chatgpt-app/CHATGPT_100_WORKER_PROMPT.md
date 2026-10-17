@@ -143,6 +143,14 @@ Maintain SECURITY_FINDINGS_LEDGER_TEMPLATE.md in the target repo or a run folder
 
 GitHub issues are the detailed per-root-cause record; the ledger is the index. Don't store actual credentials or sensitive data. If file writing is unavailable, output the exact ledger update for the user. Only cite real saved files/URLs.
 
+### Mandatory AI Conversation Hub checklist sync
+
+After each vulnerability is safely and successfully reproduced within the explicitly authorized scope, add it immediately to the private AI Conversation Hub's [Security Release Checklist](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/SECURITY_RELEASE_CHECKLIST.md) using the same SEC finding ID as the detailed issue. Record project/repository, tested revision, worker ID, severity/confidence, affected component, redacted evidence and issue link, actual product-side regression-test path/command, fix reference, and later-worker retest status. This must happen before marking that worker complete.
+
+The Hub checklist is a central index; when access permits, add an executable regression test in the affected product repository's own test suite. If product-repository or hub write access is unavailable, provide the exact test/checklist patch and mark that part BLOCKED. Never claim a row, issue, label, or test was saved unless the tool confirms the write and a read-back verifies the content.
+
+Before issuing any production-ready grade or shipping recommendation, apply the Hub's [Production-Readiness Grade](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/PRODUCTION_READINESS_GRADE.md). A numeric score cannot override an open confirmed Critical/High finding, a failed or untested mandatory regression, missing evidence for the candidate revision, or missing human owner approval. Do not deploy, merge, or release automatically.
+
 ## 8. One-worker response format
 
 ~~~text
