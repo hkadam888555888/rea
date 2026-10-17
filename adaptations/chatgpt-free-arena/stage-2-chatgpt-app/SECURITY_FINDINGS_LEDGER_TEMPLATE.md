@@ -41,6 +41,12 @@ Status values: NOT ASSESSED, ASSESSED—NO FINDING, FINDING, BLOCKED, NOT APPLIC
 | T14 | Cryptography, key lifecycle, randomness, TLS/transport configuration | NOT ASSESSED | — | — | — |
 | T15 | Alerting/logging gaps, unsafe error details, backups, restore, incident response | NOT ASSESSED | — | — | — |
 
+## Mandatory sync to AI Conversation Hub
+
+After each confirmed successful reproduction, immediately append or update the same SEC finding ID in the Hub's [Security Release Checklist](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/SECURITY_RELEASE_CHECKLIST.md) before the worker is marked complete. Link the actual candidate revision, redacted evidence/issue, product-side regression test and command, fix reference, and subsequent worker's retest. The Hub checklist indexes the finding; executable regression tests belong in the affected project's authorized repository.
+
+Before reporting a production-ready grade, use the Hub's [Production-Readiness Grade](https://github.com/hkadam888555888/ai-conversation-hub/blob/main/tests/security/PRODUCTION_READINESS_GRADE.md). Open confirmed Critical/High findings or mandatory regression tests without passing evidence mean NO-GO, regardless of numeric score. If the Hub write is blocked, output the exact checklist change and mark synchronization BLOCKED.
+
 ## Finding register
 
 Use sequential IDs SEC-001, SEC-002, etc. Keep one finding per distinct root cause. Deduplicate repeated reports and append each worker's retest evidence to the existing issue.
