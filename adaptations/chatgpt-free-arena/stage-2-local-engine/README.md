@@ -1,6 +1,6 @@
 # Stage 2 — Local Worker Tournament Engine
 
-Stage 2 turns Stage 1's debate protocol into a runnable, no-paid-API worker engine. It uses Node.js plus a locally running [Ollama](https://ollama.com/) model. The engine makes a separate inference request for every initial worker draft, every attack, every revision, and every judgment. It does not use ChatGPT Free's web UI or any paid cloud-model API.
+Stage 2 turns Stage 1's debate protocol into a runnable, no-paid-API worker engine. It uses Node.js plus a locally running [Ollama](https://ollama.com/) model. The engine makes a separate inference request for every initial worker draft, every attack, every revision, and every judgment. It does not use ChatGPT Free's web UI or any paid cloud-model API. **If you want to do this directly in the ChatGPT app instead, use [Stage 2 ChatGPT App Mode](../stage-2-chatgpt-app/README.md)**; it processes one worker per ChatGPT response and cannot bypass ChatGPT usage/context limits.
 
 ## What is real in this stage?
 
