@@ -6,7 +6,7 @@ Use this protocol for an authorized security review of one named project. This r
 
 ## Commands
 
-- **ARENA SECURITY 100: [repository/project, branch/environment, scope, goals]** — lock scope and run Worker 001.
+- **ARENA SECURITY 100: [your app's GitHub repository URL]** — use the safe default scope above and run Worker 001 after ownership/authorization is clear.
 - **NEXT WORKER** — do exactly the next numbered run; first retest prior fixes, then investigate the assigned lens, create/update findings, remediate where authorized access permits, and hand off.
 - **ARENA STATUS** — report completed worker IDs, findings by severity/state, current revision, access available, and next worker.
 - **ARENA CHECKPOINT** — output portable scope, threat register, finding IDs and links, fixes/PRs, test evidence, unresolved items, completed worker IDs, and exact next action.
@@ -57,6 +57,14 @@ Keep the register updated across all 100 runs. Each row has status NOT ASSESSED,
 15. Monitoring/recovery: unsafe error details, missing auditability, backup/restore and incident-response gaps.
 
 This is an asset/impact checklist, not a license to probe any system discovered during review. Use synthetic data. Never include actual secret values in the ledger or issue.
+
+## 3A. Required security knowledge during development
+
+Before each worker reviews code or proposes a fix, consult the Hub's reusable [Security by Design Playbook](https://github.com/hkadam888555888/ai-conversation-hub/blob/feat/security-by-design-knowledge/tests/security/SECURITY_BY_DESIGN_PLAYBOOK.md) when the connected GitHub tools can access it. It covers the assets and boundaries that should be protected during development, including credentials and signing keys, identity/recovery, account and tenant permissions, private data, injection, files/uploads, browser security, outbound requests/SSRF, business logic, resource limits, dependencies, CI/CD, monitoring, Android/mobile, web/backend, and AI/ML tool integrations.
+
+Use this playbook as a reusable threat checklist, not as proof that a vulnerability exists. For the actual app, map each relevant risk to the real code path and a test. Every time a worker changes code, apply this loop: identify asset and trust boundary → define unauthorized/malformed/replay/cross-account cases → implement least-privilege guard → add a negative regression test → run available checks and record exact results → hand the fix to a later worker for bypass retesting. Keep verified root-cause lessons and regression tests for future work; never store secrets or private user data in the shared knowledge base.
+
+If the private Hub playbook cannot be fetched, record `KNOWLEDGE BASE ACCESS: BLOCKED`, continue from the full threat objective register and this embedded protocol, and do not claim the external playbook was read. A missing link must not become a false security pass or stop safe source review.
 
 ## 4. Fixed 100-worker roster
 
