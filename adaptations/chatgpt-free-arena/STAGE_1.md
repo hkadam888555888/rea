@@ -37,19 +37,26 @@ Ship the first usable no-paid-API phase of the Arena workflow: a repeatable comp
 6. **Advance and record.** Keep the winner, raw scores, decisive issue, and remaining uncertainty. Do not invent missing results.
 7. **Report.** Return the winning deliverable, decisive attacks survived, scores, limits, and a checkpoint when continuation may be needed.
 
+## Stage 2 — actual local worker executions
+
+For separately executed worker jobs with per-worker files, automatic attack/revision calls, bracket advancement, persistent progress, and a CLI, use the [Stage 2 local worker engine](stage-2-local-engine/README.md).
+
+Stage 2 uses Node.js 22+ and a locally running Ollama model; it does not turn ChatGPT Free's web interface into an API. It can execute up to 100 initial worker runs with 100 distinct combinations of approach and focus. Workers share the same local model by default but receive isolated prompts. A 100-worker run can create hundreds of model requests, so begin with four workers and concurrency one. See [Architecture](stage-2-local-engine/docs/ARCHITECTURE.md) for the actual execution boundaries and limitations.
+
 ## How Stage 1 differs from the 100-worker target
 
-| Capability | Stage 1 status |
-|---|---|
-| Four or eight differently instructed drafts | Supported by prompt protocol |
-| Attack, revise, rubric-based judging | Supported by prompt protocol |
-| Separate ChatGPT conversations | Manual copy-and-paste only |
-| Automatically launch 100 worker processes | Not provided |
-| 100 independent model calls | Not provided |
-| Automatic collection, retries, concurrency, persistent run logs | Not provided |
-| Paid API key required | No |
+| Capability | Stage 1 | Stage 2 |
+|---|---|---|
+| Four or eight candidate drafts | Prompt protocol | Supported as local jobs |
+| Up to 100 initial worker executions | Not provided | Supported through Ollama |
+| Independent initial prompt/context per worker | Manual chat separation only | Yes, separate inference requests |
+| Different trained model weights per worker | Not guaranteed | Not provided by default |
+| Attack, defense, and revision rounds | Prompt protocol | Automated local inference workflow |
+| Automatic collection and persistent logs | Not provided | Saved to local run directory |
+| Code execution or web search | Not provided | Not provided |
+| Paid API key required | No | No |
 
-Stage 1 validates the *tournament procedure* before a later engine attempts to automate it. Stage 2 must define real worker execution, task isolation, backend limits, failure handling, and persisted evidence. It must not label 100 sequential prompts as 100 concurrent agents. Any free compute or model quota must be verified against its actual current terms before relying on it.
+Stage 1 validates the tournament procedure; Stage 2 automates the repeatable worker and match workflow locally. Neither makes the winner objectively correct.
 
 ## Completion criteria
 
@@ -71,12 +78,3 @@ Use [VALIDATION_CHECKLIST.md](VALIDATION_CHECKLIST.md) to record manual checks. 
 - Do not expose hidden chain-of-thought; provide concise reasons, evidence, calculations, and uncertainty.
 - Do not execute code, modify repositories, merge pull requests, publish, deploy, or spend money just because a candidate recommends it. Consequential actions need separate user authorization.
 - For reverse engineering, analyze software you own or are authorized to inspect. Do not help bypass licensing, activation, or access controls.
-
-## Related files
-
-- [Reusable tournament prompt](CHATGPT_ARENA_PROMPT.md)
-- [Fast launch instructions](STAGE_1_STARTER.md)
-- [Strategy cards](STRATEGY_CARDS.md)
-- [Scoring rubric](RUBRIC.md)
-- [Manual multi-chat guide](MULTI_CHAT_GUIDE.md)
-- [Validation checklist](VALIDATION_CHECKLIST.md)
